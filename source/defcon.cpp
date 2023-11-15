@@ -10,6 +10,7 @@
  */
 
 #include "lib/universal_include.h"
+#include <stdlib.h>
 
 #include <unrar/rarbloat.h>
 #include <unrar/sha1.h>
@@ -63,6 +64,16 @@ float    g_advanceTime = 0.0f;
 double   g_lastServerAdvance = 0.0f;
 float    g_predictionTime = 0.0f;
 int      g_lastProcessedSequenceId = -2;                         // -2=not yet ready to begin. -1=ready for first update (id=0)
+
+
+#define stdin  (__acrt_iob_func(0))
+#define stdout (__acrt_iob_func(1))
+#define stderr (__acrt_iob_func(2))
+
+FILE ___iob_func[] = { *stdin, *stdout, *stderr };
+extern "C" FILE * __cdecl __iob_func(void) { return ___iob_func; }
+
+
 
 
 void UpdateAdvanceTime()

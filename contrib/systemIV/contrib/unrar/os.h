@@ -3,8 +3,8 @@
 
 #include "raros.h"
 
-#define false 0
-#define true  1
+//#define false 0
+//#define true  1
 
 #ifdef __EMX__
   #define INCL_BASE
@@ -22,10 +22,10 @@
 
 #ifdef _WIN_32
 
-#define WINVER 0x0400
-#define _WIN32_WINNT 0x0300
+//#define WINVER 0x0400
+//#define _WIN32_WINNT 0x0300
 
-#define WIN32_LEAN_AND_MEAN
+//#define WIN32_LEAN_AND_MEAN
 
 #include <windows.h>
 #include <prsht.h>
@@ -128,84 +128,84 @@
 
 #endif
 
-#ifdef _UNIX
-
-#define  NM  1024
-
-#ifdef _BEOS
-#include <be/kernel/fs_info.h>
-#include <be/kernel/fs_attr.h>
-#endif
-
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/file.h>
-#if defined(__QNXNTO__)
-  #include <sys/param.h>
-#endif
-#if defined(__FreeBSD__) || defined (__NetBSD__) || defined (__OpenBSD__) || defined(__APPLE__)
-  #include <sys/param.h>
-  #include <sys/mount.h>
-#else
-#endif
-#include <pwd.h>
-#include <grp.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <string.h>
-#include <ctype.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <dirent.h>
-#include <time.h>
-#include <signal.h>
-#include <utime.h>
-#include <locale.h>
-
-#ifdef  S_IFLNK
-#define SAVE_LINKS
-#endif
-
-#define ENABLE_ACCESS
-
-#define DefConfigName  ".rarrc"
-#define DefLogName     ".rarlog"
-
-
-#define PATHDIVIDER  "/"
-#define PATHDIVIDERW L"/"
-#define CPATHDIVIDER '/'
-#define MASKALL      "*"
-#define MASKALLW     L"*"
-
-#define READBINARY   "r"
-#define READTEXT     "r"
-#define UPDATEBINARY "r+"
-#define CREATEBINARY "w+"
-#define APPENDTEXT   "a"
-
-#define _stdfunction 
-
-#ifdef __APPLE__
-	#undef BIG_ENDIAN
-	#undef LITTLE_ENDIAN
-	
-	#ifdef __BIG_ENDIAN__
-		#define BIG_ENDIAN
-	#else
-		#define LITTLE_ENDIAN
-	#endif
-#endif 
-
-#if defined(__sparc) || defined(sparc)
-  #ifndef BIG_ENDIAN
-     #define BIG_ENDIAN
-  #endif
-#endif
-
-#endif
+//#ifdef _UNIX
+//
+//#define  NM  1024
+//
+//#ifdef _BEOS
+//#include <be/kernel/fs_info.h>
+//#include <be/kernel/fs_attr.h>
+//#endif
+//
+//#include <unistd.h>
+//#include <sys/types.h>
+//#include <sys/stat.h>
+//#include <sys/file.h>
+//#if defined(__QNXNTO__)
+//  #include <sys/param.h>
+//#endif
+//#if defined(__FreeBSD__) || defined (__NetBSD__) || defined (__OpenBSD__) || defined(__APPLE__)
+//  #include <sys/param.h>
+//  #include <sys/mount.h>
+//#else
+//#endif
+//#include <pwd.h>
+//#include <grp.h>
+//#include <stdio.h>
+//#include <stdlib.h>
+//#include <stdarg.h>
+//#include <string.h>
+//#include <ctype.h>
+//#include <fcntl.h>
+//#include <errno.h>
+//#include <dirent.h>
+//#include <time.h>
+//#include <signal.h>
+//#include <utime.h>
+//#include <locale.h>
+//
+//#ifdef  S_IFLNK
+//#define SAVE_LINKS
+//#endif
+//
+//#define ENABLE_ACCESS
+//
+//#define DefConfigName  ".rarrc"
+//#define DefLogName     ".rarlog"
+//
+//
+//#define PATHDIVIDER  "/"
+//#define PATHDIVIDERW L"/"
+//#define CPATHDIVIDER '/'
+//#define MASKALL      "*"
+//#define MASKALLW     L"*"
+//
+//#define READBINARY   "r"
+//#define READTEXT     "r"
+//#define UPDATEBINARY "r+"
+//#define CREATEBINARY "w+"
+//#define APPENDTEXT   "a"
+//
+//#define _stdfunction 
+//
+//#ifdef __APPLE__
+//	#undef BIG_ENDIAN
+//	#undef LITTLE_ENDIAN
+//	
+//	#ifdef __BIG_ENDIAN__
+//		#define BIG_ENDIAN
+//	#else
+//		#define LITTLE_ENDIAN
+//	#endif
+//#endif 
+//
+//#if defined(__sparc) || defined(sparc)
+//  #ifndef BIG_ENDIAN
+//     #define BIG_ENDIAN
+//  #endif
+//#endif
+//
+//#endif
 
 typedef const char* MSGID;
 

@@ -17,7 +17,7 @@
 #define DIRECTORY_MAXSTRINGLENGTH   10240
 #define DIRECTORY_MAXDIRSIZE        1024
 
-using namespace std;
+//using namespace std;
 
 inline void reverseCopy( char *_dest, const char *_src, size_t count )
 {
@@ -28,22 +28,21 @@ inline void reverseCopy( char *_dest, const char *_src, size_t count )
 
 // Used for ints, floats and doubles, taking into account endianness
 template <class T>
-istream &readNetworkValue( istream &input, T &v )
-{
+std::istream& readNetworkValue(std::istream& input, T& v) {
 #ifndef __BIG_ENDIAN__
-	return input.read( (char *) &v, sizeof(T) );
+    return input.read(reinterpret_cast<char*>(&v), sizeof(T));
 #else
-	char u[sizeof(T)];
-	input.read( u, sizeof(T) );
-	
-	char *w = (char *) &v;
-	reverseCopy(w, u, sizeof(T));
-	return input;
+    char u[sizeof(T)];
+    input.read(u, sizeof(T));
+
+    char* w = reinterpret_cast<char*>(&v);
+    reverseCopy(w, u, sizeof(T));
+    return input;
 #endif
 }
 
 template <class T>
-ostream &writeNetworkValue( ostream &output, T v )
+std::ostream &writeNetworkValue( std::ostream &output, T v )
 {
 #ifndef __BIG_ENDIAN__
 	return output.write( (char *) &v, sizeof(T) );
@@ -959,7 +958,7 @@ void Directory::DebugPrint ( int indent )
 }
 
 
-void Directory::WritePackedInt( ostream &output, int _value )
+void Directory::WritePackedInt( std::ostream &output, int _value )
 {
     // The first byte can be either:
     // 0 - 254 inclusive : that value           OR    
@@ -979,7 +978,7 @@ void Directory::WritePackedInt( ostream &output, int _value )
 }
 
 
-int Directory::ReadPackedInt( istream &input )
+int Directory::ReadPackedInt( std::istream &input )
 {
     unsigned char code;
     input.read( (char *) &code, sizeof(code) );
@@ -999,7 +998,7 @@ int Directory::ReadPackedInt( istream &input )
 }
 
 
-bool Directory::Read ( istream &input )
+bool Directory::Read ( std::istream &input )
 {
     // 
     // Start marker
@@ -1078,7 +1077,7 @@ bool Directory::Read ( istream &input )
 }
 
 
-void Directory::Write ( ostream &output )
+void Directory::Write ( std::ostream &output )
 {
     // 
     // Start marker
@@ -1162,7 +1161,7 @@ void HexDumpData( const char *input, int length, int highlight )
 
 bool Directory::Read( char *input, int length )
 {
-    istringstream inputStream( string(input, length) );
+    std::istringstream inputStream( std::string(input, length) );
     bool result = Read( inputStream );
 	
 	if (!result) 
@@ -1173,7 +1172,7 @@ bool Directory::Read( char *input, int length )
 		HexDumpData( input, length, inputStream.tellg() );
 		AppDebugOut( "\n" );
 		
-		istringstream inputStream2( string(input, length) );
+		std::istringstream inputStream2( std::string(input, length) );
 		Read( inputStream2 );
 	}
     return result;
@@ -1182,7 +1181,7 @@ bool Directory::Read( char *input, int length )
 
 char *Directory::Write( int &length )
 {
-    ostringstream outputStream;
+    std::ostringstream outputStream;
     Write( outputStream );
     outputStream << '\x0';
     
@@ -1195,7 +1194,7 @@ char *Directory::Write( int &length )
 }
 
 
-char *Directory::ReadDynamicString ( istream &input )
+char *Directory::ReadDynamicString ( std::istream &input )
 {
 	int size = ReadPackedInt(input);
 
@@ -1221,7 +1220,7 @@ char *Directory::ReadDynamicString ( istream &input )
 }
 
 
-void Directory::WriteDynamicString ( ostream &output, char *string )
+void Directory::WriteDynamicString ( std::ostream &output, char *string )
 {
 	if ( string ) 
     {
@@ -1442,7 +1441,7 @@ void DirectoryData::SetData ( DirectoryData *data )
     }
 }
 
-static void WriteXMLString( ostream &o, const char *x )
+static void WriteXMLString( std::ostream &o, const char *x )
 {
 	while (*x) {
 		const char *sep = strpbrk( x, "<>" );
@@ -1465,7 +1464,7 @@ static void WriteXMLString( ostream &o, const char *x )
 	}
 }
 
-void DirectoryData::WriteXML( ostream &o, int indent )
+void DirectoryData::WriteXML( std::ostream &o, int indent )
 {
 	if (m_type == DIRECTORY_TYPE_UNKNOWN)
 		return;
@@ -1523,7 +1522,7 @@ void DirectoryData::DebugPrint ( int indent )
 }
 
 
-bool DirectoryData::Read ( istream &input )
+bool DirectoryData::Read ( std::istream &input )
 {
     if ( m_name )
     {
@@ -1576,7 +1575,7 @@ bool DirectoryData::Read ( istream &input )
 }
 
 
-void DirectoryData::Write ( ostream &output )
+void DirectoryData::Write ( std::ostream &output )
 {
     //
     // Our own information

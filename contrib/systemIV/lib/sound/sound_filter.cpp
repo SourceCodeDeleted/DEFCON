@@ -4,13 +4,13 @@
 
 #include "lib/debug_utils.h"
 //#include "lib/profiler.h"
-
+#include <cmath>
 #include "sound_filter.h"
 
 #ifndef M_PI
 #define M_PI 3.1415926535897932384626f
 #endif
-#define Round(a) (int)(a)
+//#define Round(a) (int)(a)
 
 
 
@@ -48,7 +48,7 @@ void DspResLowPass::CalcCoefs( float _frequency, float _resonance, float _gain )
 	if( ratio >= 0.499f ) ratio = 0.499f; 
 	float omega = 2.0f * M_PI * ratio;
 
-	m_cosOmega = (float) cos(omega);
+	m_cosOmega = (float) std::cos(omega);
 	m_sinOmega = (float) sin(omega);
 	float alpha = m_sinOmega / (2.0f * _resonance);
 
@@ -86,7 +86,7 @@ void DspResLowPass::Process(signed short *_data, unsigned int _numSamples)
 		float result = m_yn2 * m_gain;
 		if (result > 32765.0f) result = 32765.0f;
 		else if (result < -32765.0f) result = -32765.0f;
-		_data[i] = Round(result);
+		_data[i] = round(result);
 
 		++i;
 		if (i >= _numSamples) break;
@@ -98,7 +98,7 @@ void DspResLowPass::Process(signed short *_data, unsigned int _numSamples)
 		result = m_yn1 * m_gain;
 		if (result > 32765.0f) result = 32765.0f;
 		else if (result < -32765.0f) result = -32765.0f;
-		_data[i] = Round(result);
+		_data[i] = round(result);
 
 		// Only move a little data
 		m_xn1 = m_xn2;
@@ -349,7 +349,7 @@ void DspEcho::Process(signed short *_data, unsigned int _numSamples)
 				result = -32766.0f;
 			else if (result > 32766.0f) 
 				result = 32766.0f;
-			_data[i] = Round(result);
+			_data[i] = round(result);
 			m_buffer[j] = m_buffer[j] * attenuation + temp;
 		}
 

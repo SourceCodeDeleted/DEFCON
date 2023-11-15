@@ -181,7 +181,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
+//#include <math.h>
 
 #if !defined TARGET_MSVC && !defined TARGET_OS_MACOSX && !defined TARGET_OS_LINUX
 #error Please make sure that one of TARGET_MSVC, TARGET_OS_MACOSX, TARGET_OS_LINUX is set in your project preprocessor options.

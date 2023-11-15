@@ -3,7 +3,7 @@
 #include "lib/sound/soundsystem.h"
 #include "lib/math/math_utils.h"
 
-#include <math.h>
+//#include <math.h>
 
 #include "lib/resource/resource.h"
 #include "lib/resource/image.h"

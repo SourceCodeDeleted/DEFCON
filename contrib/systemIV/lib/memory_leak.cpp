@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <fstream>
-using namespace std;
+//using namespace std;
 
 #include "lib/tosser/btree.h"
 #include "lib/tosser/llist.h"
@@ -41,7 +41,7 @@ void ParseMemoryLeakFile ( char *_inputFilename, char *_outputFilename )
     // Open the file and start parsing
     //
 
-    ifstream memoryfile ( _inputFilename );
+    std::ifstream memoryfile ( _inputFilename );
 
     while ( !memoryfile.eof () ) 
     {

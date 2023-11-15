@@ -11,7 +11,7 @@
 #include "authentication.h"
 #include "metaserver_defines.h"
 
-using namespace std;
+//using namespace std;
 
 
 // ============================================================================
@@ -1132,8 +1132,8 @@ int MetaServer_GetServerTTL()
 
     //
     // Sanity check the answer
-
-    serverTTL = max( serverTTL, 10 );
+    // this was changed
+    serverTTL = std::max( serverTTL, 10 );
 
     return serverTTL;
 }

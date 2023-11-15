@@ -5,7 +5,7 @@
 #include <DSOUND.H>
 #include <DXERR.H>
 
-#include <math.h>
+//#include <math.h>
 
 #include "lib/debug_utils.h"
 #include "lib/hi_res_time.h"
@@ -27,7 +27,7 @@
 
 static char s_dxErrorMsg[512];
 
-#define SOUNDASSERT(x, y)     { if(x != DS_OK && x != S_FALSE) {  \
+/*#define //SOUNDASSERT(x, y)     { if(x != DS_OK && x != S_FALSE) {  \
                                 sprintf( s_dxErrorMsg, "%s %s", \
                                 DXGetErrorString(x),   \
                                 DXGetErrorDescription(x) );  \
@@ -37,7 +37,7 @@ static char s_dxErrorMsg[512];
                                 y,                    \
                                 DXGetErrorString(x),   \
                                 DXGetErrorDescription(x) );  \
-                                AppReleaseAssert( false, msg );  } }                                 
+                                AppReleaseAssert( false, msg );  } }  */                               
 
 
 #define NearlyEquals(a, b)	(fabsf((a) - (b)) < 1e-6 ? 1 : 0)
@@ -193,11 +193,11 @@ SoundLibrary3dDirectSound::~SoundLibrary3dDirectSound()
     {
         IDirectSoundBuffer8 *buffer = (IDirectSoundBuffer8 *) m_channels[i].m_bufferInterface;
 		errCode = buffer->Stop();
-        SOUNDASSERT( errCode, "DirectSound failed to stop secondary buffer" );
+        //SOUNDASSERT( errCode, "DirectSound failed to stop secondary buffer" );
 //        errCode = buffer->SetFX(0, NULL, NULL);
-//        SOUNDASSERT( errCode, "DirectSound failed to remove FX from secondary buffer" );
+//        //SOUNDASSERT( errCode, "DirectSound failed to remove FX from secondary buffer" );
         errCode = buffer->Release();
-        SOUNDASSERT( errCode, "DirectSound failed to release secondary buffer" );        
+        //SOUNDASSERT( errCode, "DirectSound failed to release secondary buffer" );        
     }
 	
 	delete m_channels;
@@ -207,17 +207,17 @@ SoundLibrary3dDirectSound::~SoundLibrary3dDirectSound()
     // Release primary buffer
 
     errCode = m_directSound->m_primaryBuffer->Stop();
-    SOUNDASSERT( errCode, "DirectSound failed to shutdown primary buffer" );
+    //SOUNDASSERT( errCode, "DirectSound failed to shutdown primary buffer" );
 
     errCode = m_directSound->m_primaryBuffer->Release();
-    SOUNDASSERT( errCode, "DirectSound failed to shutdown primary buffer" );
+    //SOUNDASSERT( errCode, "DirectSound failed to shutdown primary buffer" );
     
 
     //
     // Release Direct Sound Device
 
     errCode = m_directSound->m_device->Release();
-    SOUNDASSERT( errCode, "DirectSound failed to shutdown device" );
+    //SOUNDASSERT( errCode, "DirectSound failed to shutdown device" );
 
     delete m_directSound;
     
@@ -260,7 +260,7 @@ IDirectSoundBuffer *SoundLibrary3dDirectSound::CreateSecondaryBuffer(int _numSam
     dsbd.guid3DAlgorithm = DS3DALG_DEFAULT;
                    
 	errCode = m_directSound->m_device->CreateSoundBuffer(&dsbd, &buffer, NULL);
-    SOUNDASSERT( errCode, "Direct sound couldn't create a secondary buffer");
+    //SOUNDASSERT( errCode, "Direct sound couldn't create a secondary buffer");
     
     // Fill the buffer with zeros to start with
 	void *buf1;
@@ -272,13 +272,13 @@ IDirectSoundBuffer *SoundLibrary3dDirectSound::CreateSecondaryBuffer(int _numSam
 							NULL,
 							NULL,
 							DSBLOCK_ENTIREBUFFER);
-    SOUNDASSERT( errCode, "Direct Sound couldn't lock buffer" );
+    //SOUNDASSERT( errCode, "Direct Sound couldn't lock buffer" );
     memset( buf1, 0, buf1Size );        
 	buffer->Unlock(buf1, buf1Size, NULL, 0);
 
 	// Start the stream playing
 	errCode = buffer->Play( 0, 0, DSBPLAY_LOOPING );
-	SOUNDASSERT(errCode, "Direct sound couldn't start playing a stream" );
+	//SOUNDASSERT(errCode, "Direct sound couldn't start playing a stream" );
 
 	return buffer;
 }
@@ -305,11 +305,11 @@ void SoundLibrary3dDirectSound::Initialise(int _mixFreq, int _numChannels, int _
 	errCode = DirectSoundCreate8(NULL,              // Specifies default device 
 								 &m_directSound->m_device,
 								 NULL);             // Has to be NULL - stupid, stupid Microsoft
-	SOUNDASSERT(errCode, "Direct Sound couldn't create a sound device");
+	//SOUNDASSERT(errCode, "Direct Sound couldn't create a sound device");
     
 
 	errCode = m_directSound->m_device->SetCooperativeLevel(GetWindowManagerWin32()->m_hWnd, DSSCL_PRIORITY);
-	SOUNDASSERT(errCode, "Direct Sound couldn't set the cooperative level");
+	//SOUNDASSERT(errCode, "Direct Sound couldn't set the cooperative level");
 
 	
     RefreshCapabilities();
@@ -339,7 +339,7 @@ void SoundLibrary3dDirectSound::Initialise(int _mixFreq, int _numChannels, int _
 		dsbd.lpwfxFormat   = NULL;
        
 		errCode = m_directSound->m_device->CreateSoundBuffer(&dsbd, &m_directSound->m_primaryBuffer, NULL);
-		SOUNDASSERT(errCode, "Direct sound couldn't create the primary sound buffer");
+		//SOUNDASSERT(errCode, "Direct sound couldn't create the primary sound buffer");
 
 		WAVEFORMATEX wfx;
 		ZeroMemory( &wfx, sizeof(WAVEFORMATEX) ); 
@@ -351,7 +351,7 @@ void SoundLibrary3dDirectSound::Initialise(int _mixFreq, int _numChannels, int _
 		wfx.nAvgBytesPerSec = (DWORD) (wfx.nSamplesPerSec * wfx.nBlockAlign);
 
 		errCode = m_directSound->m_primaryBuffer->SetFormat(&wfx);
-		SOUNDASSERT(errCode, "Direct sound couldn't set the primary sound buffer format");
+		//SOUNDASSERT(errCode, "Direct sound couldn't set the primary sound buffer format");
 	}
 
     
@@ -372,7 +372,7 @@ void SoundLibrary3dDirectSound::Initialise(int _mixFreq, int _numChannels, int _
 		// Get the DirectSound3DBuffer interface
 		errCode = m_channels[i].m_bufferInterface->QueryInterface( IID_IDirectSound3DBuffer, 
 														  (void **) &m_channels[i].m_buffer3DInterface );
-		SOUNDASSERT(errCode, "Direct sound couldn't get Sound3DBuffer interface");
+		//SOUNDASSERT(errCode, "Direct sound couldn't get Sound3DBuffer interface");
 	}    
 
     for( int i = m_numChannels-m_numMusicChannels; i < m_numChannels; ++i )
@@ -394,7 +394,7 @@ void SoundLibrary3dDirectSound::RefreshCapabilities()
     ZeroMemory( &m_directSound->m_caps, sizeof(DSCAPS) );
     m_directSound->m_caps.dwSize = sizeof(DSCAPS);
     int errCode = m_directSound->m_device->GetCaps( &m_directSound->m_caps );    
-    SOUNDASSERT(errCode, "Direct sound couldn't get driver caps");
+    //SOUNDASSERT(errCode, "Direct sound couldn't get driver caps");
 }
 
 
@@ -444,7 +444,7 @@ int SoundLibrary3dDirectSound::GetCPUOverhead()
         ZeroMemory( &caps, sizeof(caps) );
         caps.dwSize = sizeof(DSBCAPS);
         int errCode = m_channels[i].m_bufferInterface->GetCaps( &caps );
-        SOUNDASSERT( errCode, "Direct sound couldn't get CPU overhead" );
+        //SOUNDASSERT( errCode, "Direct sound couldn't get CPU overhead" );
 
         total += caps.dwPlayCpuOverhead;
     }
@@ -517,7 +517,7 @@ void SoundLibrary3dDirectSound::SetChannel3DMode( int _channel, int _mode )
 			case 2 :            errCode = buffer3d->SetMode( DS3DMODE_DISABLE,        DS3D_IMMEDIATE );           break;
 		};
 
-		SOUNDASSERT(errCode, "Direct sound couldn't set channel 3D mode" );
+		//SOUNDASSERT(errCode, "Direct sound couldn't set channel 3D mode" );
 	}
 }
 
@@ -534,10 +534,10 @@ void SoundLibrary3dDirectSound::SetChannelPosition( int _channel, Vector3<float>
 
 		IDirectSound3DBuffer *buffer3d = channel->m_buffer3DInterface;
 		int errCode = buffer3d->SetPosition( _pos.x, _pos.y, _pos.z, DS3D_DEFERRED );
-		SOUNDASSERT(errCode, "Direct sound couldn't set buffer3d position");
+		//SOUNDASSERT(errCode, "Direct sound couldn't set buffer3d position");
 
 		errCode = buffer3d->SetVelocity( _vel.x, _vel.y, _vel.z, DS3D_DEFERRED );
-		SOUNDASSERT(errCode, "Direct sound couldn't set buffer3d velocity");
+		//SOUNDASSERT(errCode, "Direct sound couldn't set buffer3d velocity");
 	}
 }
 
@@ -575,7 +575,7 @@ void SoundLibrary3dDirectSound::SetChannelFrequency( int _channel, int _frequenc
         {
             IDirectSoundBuffer *buffer = channel->m_bufferInterface;
             int errCode = buffer->SetFrequency( _frequency );
-            SOUNDASSERT( errCode, "Direct sound couldn't set channel frequency" );
+            //SOUNDASSERT( errCode, "Direct sound couldn't set channel frequency" );
         }
 	}
 }
@@ -599,7 +599,7 @@ void SoundLibrary3dDirectSound::SetChannelMinDistance( int _channel, float _minD
 		
 		IDirectSound3DBuffer *buffer3d = channel->m_buffer3DInterface;
 		int errCode = buffer3d->SetMinDistance( _minDistance, DS3D_DEFERRED );
-		SOUNDASSERT(errCode, "Direct sound couldn't set buffer3d min distance");
+		//SOUNDASSERT(errCode, "Direct sound couldn't set buffer3d min distance");
 	}
 }
 
@@ -623,7 +623,7 @@ void SoundLibrary3dDirectSound::SetChannelVolume( int _channel, float _volume )
 
 		IDirectSoundBuffer *buffer = channel->m_bufferInterface;
 		int errCode = buffer->SetVolume( calculatedVolume );
-		SOUNDASSERT( errCode, "Direct sound couldn't set buffer volume" );        
+		//SOUNDASSERT( errCode, "Direct sound couldn't set buffer volume" );        
 	}
 }
 
@@ -637,17 +637,17 @@ void SoundLibrary3dDirectSound::SetListenerPosition( Vector3<float> const &_pos,
 
     IDirectSound3DListener *listener = NULL;
     int errCode = m_directSound->m_primaryBuffer->QueryInterface( IID_IDirectSound3DListener, (void **) &listener );
-    SOUNDASSERT(errCode, "Direct sound couldn't get Sound3DListener interface");
+    //SOUNDASSERT(errCode, "Direct sound couldn't get Sound3DListener interface");
 
     errCode = listener->SetPosition( _pos.x, _pos.y, _pos.z, DS3D_DEFERRED );
-    SOUNDASSERT( errCode, "Direct sound couldn't set listener position" );
+    //SOUNDASSERT( errCode, "Direct sound couldn't set listener position" );
 
     errCode = listener->SetOrientation( _front.x, _front.y, _front.z, 
                                         _up.x, _up.y, _up.z, DS3D_DEFERRED );
-    SOUNDASSERT( errCode, "Direct sound couldn't set listener orientation" );
+    //SOUNDASSERT( errCode, "Direct sound couldn't set listener orientation" );
 
     errCode = listener->SetVelocity( _vel.x, _vel.y, _vel.z, DS3D_DEFERRED );
-    SOUNDASSERT( errCode, "Direct sound couldn't set listener velocity" );
+    //SOUNDASSERT( errCode, "Direct sound couldn't set listener velocity" );
 }
 
 
@@ -655,10 +655,10 @@ void SoundLibrary3dDirectSound::SetDopplerFactor( float _doppler )
 {
     IDirectSound3DListener *listener = NULL;
     int errCode = m_directSound->m_primaryBuffer->QueryInterface( IID_IDirectSound3DListener, (void **) &listener );
-    SOUNDASSERT(errCode, "Direct sound couldn't get Sound3DListener interface");
+    //SOUNDASSERT(errCode, "Direct sound couldn't get Sound3DListener interface");
 
     errCode = listener->SetDopplerFactor( _doppler, DS3D_IMMEDIATE );
-    SOUNDASSERT(errCode, "Direct sound couldn't set Doppler factor" );
+    //SOUNDASSERT(errCode, "Direct sound couldn't set Doppler factor" );
 }
 
 
@@ -667,10 +667,10 @@ void SoundLibrary3dDirectSound::CommitChanges()
 {
     IDirectSound3DListener *listener = NULL;
     int errCode = m_directSound->m_primaryBuffer->QueryInterface( IID_IDirectSound3DListener, (void **) &listener );
-    SOUNDASSERT(errCode, "Direct sound couldn't get Sound3DListener interface");
+    //SOUNDASSERT(errCode, "Direct sound couldn't get Sound3DListener interface");
 
     errCode = listener->CommitDeferredSettings();
-    SOUNDASSERT( errCode, "Direct sound couldn't commit deferred listener changes");
+    //SOUNDASSERT( errCode, "Direct sound couldn't commit deferred listener changes");
 }
 
 
@@ -694,7 +694,7 @@ void SoundLibrary3dDirectSound::PopulateBuffer(int _channel, int _fromSample, in
                                                  &buf2, &size2,
                                                  0);
 	END_PROFILE( "LockBuf");
-    SOUNDASSERT(errCode, "Direct sound couldn't get a lock on a secondary buffer");
+    //SOUNDASSERT(errCode, "Direct sound couldn't get a lock on a secondary buffer");
 
 
     //
@@ -738,7 +738,7 @@ void SoundLibrary3dDirectSound::PopulateBuffer(int _channel, int _fromSample, in
 	START_PROFILE( "UnlockBuf");
     errCode = channel->m_bufferInterface->Unlock(buf1, size1, buf2, size2);
 	END_PROFILE( "UnlockBuf");
-    SOUNDASSERT(errCode, "Direct sound couldn't unlock a secondary buffer");
+    //SOUNDASSERT(errCode, "Direct sound couldn't unlock a secondary buffer");
         
     channel->m_lastSampleWritten = _fromSample + _numSamples - 1;
     channel->m_lastSampleWritten %= channel->m_numBufferSamples;
@@ -777,7 +777,7 @@ void SoundLibrary3dDirectSound::AdvanceChannel(int _channel, int _frameNum)
 		(_channel & 1) == (_frameNum&1))
 	{
 		errCode = channel->m_bufferInterface->GetCurrentPosition(&playCursor, NULL);
-		SOUNDASSERT(errCode, "Direct sound couldn't get current position");
+		//SOUNDASSERT(errCode, "Direct sound couldn't get current position");
 		channel->UpdateSimulatedPlayCursor(playCursor);
 	}
 	else
@@ -923,7 +923,7 @@ void SoundLibrary3dDirectSound::ResetChannel( int _channel )
     unsigned long playCursor;
     unsigned long writeCursor;
     errCode = channel->m_bufferInterface->GetCurrentPosition(&playCursor, &writeCursor);
-    SOUNDASSERT(errCode, "Direct sound couldn't get current position");
+    //SOUNDASSERT(errCode, "Direct sound couldn't get current position");
 	
 
 	//
@@ -1010,21 +1010,21 @@ void SoundLibrary3dDirectSound::EnableDspFX(int _channel, int _numFilters, int c
 		// Stop the channel
 
 		errCode = buffer->Stop();
-		SOUNDASSERT( errCode, "Direct sound couldn't stop a secondary buffer from playing" );
+		//SOUNDASSERT( errCode, "Direct sound couldn't stop a secondary buffer from playing" );
 
 
 		//
 		// Set up the filters
 
 		errCode = buffer->SetFX( numDSoundFilters, desc, results );
-		SOUNDASSERT( errCode, "Direct sound couldn't set fx" );
+		//SOUNDASSERT( errCode, "Direct sound couldn't set fx" );
 
 
 		//
 		// Restart the channel
 
 		errCode = buffer->Play( 0, 0,  DSBPLAY_LOOPING );
-		SOUNDASSERT( errCode, "Direct sound couldn't play a secondary buffer" );
+		//SOUNDASSERT( errCode, "Direct sound couldn't play a secondary buffer" );
 	}
 
 
@@ -1082,7 +1082,7 @@ void SoundLibrary3dDirectSound::UpdateDspFX( int _channel, int _filterType, int 
 										  0, 
 										  interfaceClass, 
 										  (void **) &effect );
-		SOUNDASSERT( errCode, "Failed to get hold of DirectFX filter" );
+		//SOUNDASSERT( errCode, "Failed to get hold of DirectFX filter" );
     
 		switch( _filterType )
 		{
@@ -1118,7 +1118,7 @@ void SoundLibrary3dDirectSound::UpdateDspFX( int _channel, int _filterType, int 
 				AppReleaseAssert( false, "Unknown filter type" );
 		}
 	
-		SOUNDASSERT( errCode, "Failed to set filter parameters" );
+		//SOUNDASSERT( errCode, "Failed to set filter parameters" );
 	}
     else
 	{
@@ -1143,7 +1143,7 @@ void SoundLibrary3dDirectSound::DisableDspFX( int _channel )
     // Stop the channel
 
     errCode = buffer->Stop();
-    SOUNDASSERT( errCode, "Direct sound couldn't stop a secondary buffer" );
+    //SOUNDASSERT( errCode, "Direct sound couldn't stop a secondary buffer" );
 
     
     //
@@ -1160,12 +1160,12 @@ void SoundLibrary3dDirectSound::DisableDspFX( int _channel )
 		}
 	}
 	errCode = buffer->SetFX( 0, NULL, NULL );
-    SOUNDASSERT( errCode, "Direct sound couldn't set fx" );
+    //SOUNDASSERT( errCode, "Direct sound couldn't set fx" );
 
     
     //
     // Restart the channel
 
     errCode = buffer->Play( 0, 0,  DSBPLAY_LOOPING );
-    SOUNDASSERT( errCode, "Direct sound couldn't play a secondary buffer" );    
+    //SOUNDASSERT( errCode, "Direct sound couldn't play a secondary buffer" );    
 }

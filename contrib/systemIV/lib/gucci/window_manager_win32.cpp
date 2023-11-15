@@ -9,10 +9,11 @@
 #include "window_manager_win32.h"
 
 
+
 static HINSTANCE g_hInstance;
 
 #define WH_KEYBOARD_LL 13
-#define LLKHF_ALTDOWN 0x20
+//#define LLKHF_ALTDOWN 0x20
 
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

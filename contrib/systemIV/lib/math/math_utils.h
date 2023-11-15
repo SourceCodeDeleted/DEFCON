@@ -20,11 +20,11 @@ using std::max;
 #define signf(a)			    ((a) < 0.0f ? -1.0f : 1.0f) 
 
 
-#define Round(a)                ((int)(a))
+//#define Round(a)                ((int)(a))
 
-#ifdef TARGET_MSVC
-    #define round Round
-#endif
+//#ifdef TARGET_MSVC
+//    #define round Round
+//#endif
 
 template <class T>
 inline void Clamp(T &a, T low, T high)

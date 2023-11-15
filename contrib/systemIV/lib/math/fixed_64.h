@@ -2,7 +2,7 @@
 #define FIXED64_H
  
 #include <ostream>
-#include <math.h>
+//#include <math.h>
 
 //
 // Numeric type definitions

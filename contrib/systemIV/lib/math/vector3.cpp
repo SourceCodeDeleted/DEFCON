@@ -1,6 +1,6 @@
 #include "lib/universal_include.h"
 
-#include <math.h>
+//#include <math.h>
 #include <float.h>
 
 #include "vector2.h"
